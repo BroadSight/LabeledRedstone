@@ -2,7 +2,7 @@
 .gradle
 build/
 gradle/
-gradlew/
+gradlew
 gradlew.bat
 
 # forge gradle

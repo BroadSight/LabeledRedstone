@@ -1,0 +1,21 @@
+[
+{
+  "modid": "LabeledRedstone",
+  "name": "Labeled Redstone",
+  "description": "Labeling redstone for simplicity's sake.",
+  "version": "1.0",
+  "mcversion": "1.8",
+  "url": "",
+  "updateUrl": "",
+  "authorList": [
+    "minercraftstyle"
+  ],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+  ]
+}
+]
