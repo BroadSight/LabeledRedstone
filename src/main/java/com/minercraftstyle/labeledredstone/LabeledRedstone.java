@@ -29,13 +29,13 @@ public class LabeledRedstone
         FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
 
         ModItems.init();
-        ModBlocks.init();
+        //ModBlocks.init();
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
-        Recipes.init();
+        //Recipes.init();
     }
 
     @Mod.EventHandler
