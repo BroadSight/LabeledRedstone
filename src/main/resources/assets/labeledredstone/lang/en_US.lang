@@ -1,3 +1,4 @@
 item.labeledredstone:test.name=Test
+item.labeledredstone:labeledLever.name=Labeled Lever
 
 itemGroup.labeledredstone=Labeled Redstone
