@@ -2,6 +2,7 @@ package com.minercraftstyle.labeledredstone.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -13,10 +14,11 @@ import net.minecraft.world.World;
 public class BlockWallLLever extends BlockLabeledLever
 {
     public static final PropertyDirection FACING_PROP = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+    public static final PropertyBool POWERED_PROP = PropertyBool.create("powered");
 
     public BlockWallLLever()
     {
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING_PROP, EnumFacing.NORTH));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING_PROP, EnumFacing.NORTH).withProperty(POWERED_PROP, false));
     }
 
     public void setBlockBoundsBasedOnState(IBlockAccess access, BlockPos pos)
@@ -77,7 +79,7 @@ public class BlockWallLLever extends BlockLabeledLever
 
     protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] {FACING_PROP});
+        return new BlockState(this, new IProperty[] {FACING_PROP, POWERED_PROP});
     }
 
     static final class SwitchEnumFacing

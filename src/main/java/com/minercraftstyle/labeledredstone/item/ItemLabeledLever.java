@@ -17,17 +17,13 @@ public class ItemLabeledLever extends ItemLR
 {
     public ItemLabeledLever()
     {
+        super.setUnlocalizedName("labeledLever");
         this.maxStackSize = 16;
-        this.setUnlocalizedName("labeledLever");
     }
 
     public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        if (side == EnumFacing.DOWN)
-        {
-            return false;
-        }
-        else if (!worldIn.getBlockState(pos).getBlock().getMaterial().isSolid())
+        if (!worldIn.getBlockState(pos).getBlock().getMaterial().isSolid())
         {
             return false;
         }
@@ -49,10 +45,10 @@ public class ItemLabeledLever extends ItemLR
             }
             else
             {
-                if (side == EnumFacing.UP)
+                if (side == EnumFacing.UP || side == EnumFacing.DOWN)
                 {
                     int i = MathHelper.floor_double((double) ((playerIn.rotationYaw + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
-                    worldIn.setBlockState(pos, ModBlocks.standing_llever.getDefaultState().withProperty(BlockStandingLLever.ROTATION_PROP, Integer.valueOf(i)), 3);
+                    worldIn.setBlockState(pos, ModBlocks.standing_llever.getDefaultState().withProperty(BlockStandingLLever.ROTATION_PROP, Integer.valueOf(i)).withProperty(BlockStandingLLever.FACING_PROP, BlockStandingLLever.EnumOrientation.getState(side, playerIn.func_174811_aO(), playerIn.isSneaking())), 3);
                 }
                 else
                 {

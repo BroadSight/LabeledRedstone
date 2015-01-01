@@ -1,5 +1,6 @@
 package com.minercraftstyle.labeledredstone.client.model;
 
+import com.minercraftstyle.labeledredstone.reference.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
@@ -14,7 +15,7 @@ public class ModelHelper
     public static void registerItem(Item item, int metadata, String itemName)
     {
         ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-        mesher.register(item, metadata, new ModelResourceLocation(itemName, "inventory"));
+        mesher.register(item, metadata, new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + itemName, "inventory"));
     }
 
     public static void registerBlock(Block block, int metatdata, String blockName)

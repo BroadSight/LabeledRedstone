@@ -20,8 +20,9 @@ public class BlockLabeledLever extends BlockLRContainer
 {
     protected BlockLabeledLever()
     {
+        super();
         float f = 0.25F;
-        this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 1.0F, 0.5F - f);
+        this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 1.0F, 0.5F + f);
     }
 
     public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state)

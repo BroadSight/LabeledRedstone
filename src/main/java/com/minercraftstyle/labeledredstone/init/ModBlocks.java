@@ -2,8 +2,10 @@ package com.minercraftstyle.labeledredstone.init;
 
 import com.minercraftstyle.labeledredstone.block.BlockStandingLLever;
 import com.minercraftstyle.labeledredstone.block.BlockWallLLever;
+import com.minercraftstyle.labeledredstone.client.model.ModelHelper;
 import com.minercraftstyle.labeledredstone.reference.Reference;
 import com.minercraftstyle.labeledredstone.util.LogHelper;
+import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @GameRegistry.ObjectHolder(Reference.MOD_ID)

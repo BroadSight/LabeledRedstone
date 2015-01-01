@@ -23,7 +23,7 @@ public abstract class BlockLRContainer extends BlockLR implements ITileEntityPro
 
     public int getRenderType()
     {
-        return -1;
+        return 3;
     }
 
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state)

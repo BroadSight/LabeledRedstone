@@ -9,6 +9,7 @@ public class BlockLR extends Block
     public BlockLR(Material material)
     {
         super(material);
+        this.setCreativeTab(null);
     }
 
     public BlockLR()

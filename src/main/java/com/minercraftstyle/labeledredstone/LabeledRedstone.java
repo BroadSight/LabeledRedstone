@@ -2,6 +2,7 @@ package com.minercraftstyle.labeledredstone;
 
 import com.minercraftstyle.labeledredstone.handler.ConfigurationHandler;
 import com.minercraftstyle.labeledredstone.init.ModBlocks;
+import com.minercraftstyle.labeledredstone.init.Models;
 import com.minercraftstyle.labeledredstone.init.ModItems;
 import com.minercraftstyle.labeledredstone.init.Recipes;
 import com.minercraftstyle.labeledredstone.proxy.IProxy;
@@ -35,6 +36,7 @@ public class LabeledRedstone
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
+        Models.init();
         Recipes.init();
     }
 

@@ -1,9 +1,11 @@
 package com.minercraftstyle.labeledredstone.init;
 
+import com.minercraftstyle.labeledredstone.client.model.ModelHelper;
 import com.minercraftstyle.labeledredstone.item.ItemLR;
 import com.minercraftstyle.labeledredstone.item.ItemLabeledLever;
 import com.minercraftstyle.labeledredstone.reference.Reference;
 import com.minercraftstyle.labeledredstone.util.LogHelper;
+import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @GameRegistry.ObjectHolder(Reference.MOD_ID)
