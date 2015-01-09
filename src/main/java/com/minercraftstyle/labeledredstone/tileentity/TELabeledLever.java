@@ -17,6 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class TELabeledLever extends TileEntity
 {
     public final IChatComponent[] signText = new IChatComponent[] {new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText("")};
+    public final int rotation = 0;
     public int lineBeingEdited = -1;
     private boolean isEditable = true;
     private EntityPlayer player;
@@ -26,7 +27,7 @@ public class TELabeledLever extends TileEntity
     {
         super.writeToNBT(compound);
 
-        for (int i = 0; i > 4; ++i)
+        for (int i = 0; i < 4; ++i)
         {
             String s = IChatComponent.Serializer.componentToJson(this.signText[i]);
             compound.setString("Text" + (i + 1), s);
@@ -50,7 +51,7 @@ public class TELabeledLever extends TileEntity
                 return new ChatComponentText(this.getName());
             }
             public void addChatMessage(IChatComponent message) {}
-            public boolean canCommandSenderUseCommand(int permissionLevel, String command)
+            public boolean canUseCommand(int permLevel, String command)
             {
                 return true;
             }
@@ -74,7 +75,7 @@ public class TELabeledLever extends TileEntity
             {
                 return false;
             }
-            public void func_174794_a(CommandResultStats.Type p_174794_1_, int p_174794_2_) {}
+            public void setCommandStat(CommandResultStats.Type type, int amount) {}
         };
 
         for (int i = 0; i < 4; ++i)
@@ -135,6 +136,11 @@ public class TELabeledLever extends TileEntity
     public EntityPlayer getPlayer()
     {
         return this.player;
+    }
+
+    public int getRotation()
+    {
+        return rotation;
     }
 
     public boolean guiEventHandler(EntityPlayer playerIn)

@@ -2,6 +2,7 @@ package com.minercraftstyle.labeledredstone.block;
 
 import com.minercraftstyle.labeledredstone.init.ModItems;
 import com.minercraftstyle.labeledredstone.tileentity.TELabeledLever;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -74,7 +75,6 @@ public class BlockLabeledLever extends BlockLRContainer
             return tileentity instanceof TELabeledLever ? ((TELabeledLever)tileentity).guiEventHandler(playerIn) : false;
         }
     }
-
 
     @SideOnly(Side.CLIENT)
     public Item getItem(World worldIn, BlockPos pos)

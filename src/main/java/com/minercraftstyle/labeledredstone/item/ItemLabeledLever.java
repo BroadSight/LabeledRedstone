@@ -31,11 +31,11 @@ public class ItemLabeledLever extends ItemLR
         {
             pos = pos.offset(side);
 
-            if (!playerIn.func_175151_a(pos, side, stack))
+            if (!playerIn.canPlayerEdit(pos, side, stack))
             {
                 return false;
             }
-            else if (!ModBlocks.standing_llever.canPlaceBlockAt(worldIn, pos))
+            else if (!(ModBlocks.standing_llever.canPlaceBlockAt(worldIn, pos) || ModBlocks.wall_llever.canPlaceBlockAt(worldIn, pos)))
             {
                 return false;
             }
@@ -48,7 +48,9 @@ public class ItemLabeledLever extends ItemLR
                 if (side == EnumFacing.UP || side == EnumFacing.DOWN)
                 {
                     int i = MathHelper.floor_double((double) ((playerIn.rotationYaw + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
-                    worldIn.setBlockState(pos, ModBlocks.standing_llever.getDefaultState().withProperty(BlockStandingLLever.ROTATION_PROP, Integer.valueOf(i)).withProperty(BlockStandingLLever.FACING_PROP, BlockStandingLLever.EnumOrientation.getState(side, playerIn.func_174811_aO(), playerIn.isSneaking())), 3);
+                    worldIn.setBlockState(pos, ModBlocks.standing_llever.getDefaultState()
+                            .withProperty(BlockStandingLLever.FACING_PROP, BlockStandingLLever.EnumOrientation.getState(side, playerIn.getHorizontalFacing(), playerIn.isSneaking()))
+                            , 3);
                 }
                 else
                 {

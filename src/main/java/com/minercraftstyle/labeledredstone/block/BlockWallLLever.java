@@ -69,17 +69,32 @@ public class BlockWallLLever extends BlockLabeledLever
             enumFacing = EnumFacing.NORTH;
         }
 
-        return this.getDefaultState().withProperty(FACING_PROP, enumFacing);
+        return this.getDefaultState().withProperty(FACING_PROP, enumFacing).withProperty(POWERED_PROP, Boolean.valueOf((meta & 8) > 0));
     }
 
     public int getMetaFromState(IBlockState state)
     {
-        return ((EnumFacing)state.getValue(FACING_PROP)).getIndex();
+        int meta = ((EnumFacing)state.getValue(FACING_PROP)).getIndex();
+
+        if (((Boolean)state.getValue(POWERED_PROP)).booleanValue())
+        {
+            meta |= 8;
+        }
+
+        return meta;
     }
 
     protected BlockState createBlockState()
     {
         return new BlockState(this, new IProperty[] {FACING_PROP, POWERED_PROP});
+    }
+
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
+    {
+        return worldIn.isSideSolid(pos.offset(EnumFacing.NORTH), EnumFacing.SOUTH) ||
+               worldIn.isSideSolid(pos.offset(EnumFacing.SOUTH), EnumFacing.NORTH) ||
+               worldIn.isSideSolid(pos.offset(EnumFacing.EAST),  EnumFacing.WEST)  ||
+               worldIn.isSideSolid(pos.offset(EnumFacing.WEST),  EnumFacing.EAST);
     }
 
     static final class SwitchEnumFacing

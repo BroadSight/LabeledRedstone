@@ -7,30 +7,27 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.World;
 
-import java.util.Iterator;
-
 public class BlockStandingLLever extends BlockLabeledLever
 {
-    public static final PropertyInteger ROTATION_PROP = PropertyInteger.create("rotation", 0, 15);
     public static final PropertyEnum FACING_PROP = PropertyEnum.create("facing", BlockStandingLLever.EnumOrientation.class);
     public static final PropertyBool POWERED_PROP = PropertyBool.create("powered");
 
     public BlockStandingLLever()
     {
         super();
-        this.setDefaultState(this.blockState.getBaseState().withProperty(ROTATION_PROP, Integer.valueOf(0)).withProperty(FACING_PROP, BlockStandingLLever.EnumOrientation.UP_X).withProperty(POWERED_PROP, Boolean.valueOf(false)));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING_PROP, BlockStandingLLever.EnumOrientation.UP_X).withProperty(POWERED_PROP, Boolean.valueOf(false)));
     }
 
     public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
     {
-        if (!worldIn.getBlockState(pos.offsetDown()).getBlock().getMaterial().isSolid() || !worldIn.getBlockState(pos.offsetUp()).getBlock().getMaterial().isSolid())
+        EnumFacing facing = ((EnumOrientation)state.getValue(FACING_PROP)).getDirection().getOpposite();
+
+        if (!worldIn.isSideSolid(pos.offset(facing), facing.getOpposite()))
         {
             this.dropBlockAsItem(worldIn, pos, state, 0);
             worldIn.setBlockToAir(pos);
@@ -41,17 +38,24 @@ public class BlockStandingLLever extends BlockLabeledLever
 
     public IBlockState getStateFromMeta(int meta)
     {
-        return this.getDefaultState().withProperty(ROTATION_PROP, Integer.valueOf(meta));
+        return this.getDefaultState().withProperty(FACING_PROP, BlockStandingLLever.EnumOrientation.getDirectionFromIndex(meta & 7)).withProperty(POWERED_PROP, Boolean.valueOf((meta & 8) > 0));
     }
 
     public int getMetaFromState(IBlockState state)
     {
-        return ((Integer)state.getValue(ROTATION_PROP)).intValue();
+        byte b = 0;
+        int meta = b | ((BlockStandingLLever.EnumOrientation)state.getValue(FACING_PROP)).getIndex();
+
+        if (((Boolean)state.getValue(POWERED_PROP)).booleanValue())
+        {
+            meta |= 8;
+        }
+        return meta;
     }
 
     protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] {ROTATION_PROP, FACING_PROP, POWERED_PROP});
+        return new BlockState(this, new IProperty[] {FACING_PROP, POWERED_PROP});
     }
 
     /*
@@ -59,13 +63,15 @@ public class BlockStandingLLever extends BlockLabeledLever
     {
         return side == EnumFacing.UP || side == EnumFacing.DOWN;
     }
+    */
 
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
     {
-        return worldIn.isSideSolid(pos.offsetDown(), EnumFacing.UP) ||
-               worldIn.isSideSolid(pos.offsetUp(),   EnumFacing.DOWN);
+        return worldIn.isSideSolid(pos.offset(EnumFacing.DOWN), EnumFacing.UP) ||
+               worldIn.isSideSolid(pos.offset(EnumFacing.UP),   EnumFacing.DOWN);
     }
 
+    /*
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
     {
         IBlockState iblockstate = this.getDefaultState().withProperty(POWERED_PROP, Boolean.valueOf(false));
@@ -137,9 +143,9 @@ public class BlockStandingLLever extends BlockLabeledLever
                         switch (BlockStandingLLever.SwitchEnumFacing.AXIS_LOOKUP[playerFacing.getAxis().ordinal()])
                         {
                             case 1:
-                                return DOWN_Z;
+                                return BlockStandingLLever.EnumOrientation.DOWN_Z;
                             case 2:
-                                return DOWN_X;
+                                return BlockStandingLLever.EnumOrientation.DOWN_X;
                             default:
                                 throw new IllegalArgumentException("Invalid entityFacing " + playerFacing + "for facing " + blockFacing);
                         }
@@ -149,9 +155,9 @@ public class BlockStandingLLever extends BlockLabeledLever
                         switch (BlockStandingLLever.SwitchEnumFacing.AXIS_LOOKUP[playerFacing.getAxis().ordinal()])
                         {
                             case 1:
-                                return DOWN_X;
+                                return BlockStandingLLever.EnumOrientation.DOWN_X;
                             case 2:
-                                return DOWN_Z;
+                                return BlockStandingLLever.EnumOrientation.DOWN_Z;
                             default:
                                 throw new IllegalArgumentException("Invalid entityFacing " + playerFacing + "for facing " + blockFacing);
                         }
@@ -162,9 +168,9 @@ public class BlockStandingLLever extends BlockLabeledLever
                         switch (BlockStandingLLever.SwitchEnumFacing.AXIS_LOOKUP[playerFacing.getAxis().ordinal()])
                         {
                             case 1:
-                                return UP_Z;
+                                return BlockStandingLLever.EnumOrientation.UP_Z;
                             case 2:
-                                return UP_X;
+                                return BlockStandingLLever.EnumOrientation.UP_X;
                             default:
                                 throw new IllegalArgumentException("Invalid entityFacing " + playerFacing + "for facing " + blockFacing);
                         }
@@ -174,9 +180,9 @@ public class BlockStandingLLever extends BlockLabeledLever
                         switch (BlockStandingLLever.SwitchEnumFacing.AXIS_LOOKUP[playerFacing.getAxis().ordinal()])
                         {
                             case 1:
-                                return UP_X;
+                                return BlockStandingLLever.EnumOrientation.UP_X;
                             case 2:
-                                return UP_Z;
+                                return BlockStandingLLever.EnumOrientation.UP_Z;
                             default:
                                 throw new IllegalArgumentException("Invalid entityFacing " + playerFacing + "for facing " + blockFacing);
                         }
