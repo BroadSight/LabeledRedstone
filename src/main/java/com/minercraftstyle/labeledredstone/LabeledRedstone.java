@@ -1,10 +1,8 @@
 package com.minercraftstyle.labeledredstone;
 
 import com.minercraftstyle.labeledredstone.handler.ConfigurationHandler;
-import com.minercraftstyle.labeledredstone.init.ModBlocks;
-import com.minercraftstyle.labeledredstone.init.Models;
-import com.minercraftstyle.labeledredstone.init.ModItems;
-import com.minercraftstyle.labeledredstone.init.Recipes;
+import com.minercraftstyle.labeledredstone.init.*;
+import com.minercraftstyle.labeledredstone.network.message.LabeledRedstoneMessage;
 import com.minercraftstyle.labeledredstone.proxy.IProxy;
 import com.minercraftstyle.labeledredstone.reference.Reference;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -13,6 +11,9 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY_CLASS)
 public class LabeledRedstone
@@ -23,14 +24,21 @@ public class LabeledRedstone
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
     public static IProxy proxy;
 
+    public static SimpleNetworkWrapper network;
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
         FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
 
+        network = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID + ":Channel");
+        network.registerMessage(LabeledRedstoneMessage.ClientHandler.class, LabeledRedstoneMessage.class, 0, Side.CLIENT);
+        network.registerMessage(LabeledRedstoneMessage.ServerHandler.class, LabeledRedstoneMessage.class, 1, Side.SERVER);
+
         ModItems.init();
         ModBlocks.init();
+        ModTileEntities.init();
     }
 
     @Mod.EventHandler

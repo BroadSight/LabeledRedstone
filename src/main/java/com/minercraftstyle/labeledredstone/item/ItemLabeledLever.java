@@ -1,7 +1,6 @@
 package com.minercraftstyle.labeledredstone.item;
 
-import com.minercraftstyle.labeledredstone.block.BlockStandingLLever;
-import com.minercraftstyle.labeledredstone.block.BlockWallLLever;
+import com.minercraftstyle.labeledredstone.block.BlockLabeledLever;
 import com.minercraftstyle.labeledredstone.init.ModBlocks;
 import com.minercraftstyle.labeledredstone.tileentity.TELabeledLever;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,7 +34,7 @@ public class ItemLabeledLever extends ItemLR
             {
                 return false;
             }
-            else if (!(ModBlocks.standing_llever.canPlaceBlockAt(worldIn, pos) || ModBlocks.wall_llever.canPlaceBlockAt(worldIn, pos)))
+            else if (!ModBlocks.block_labeled_lever.canPlaceBlockAt(worldIn, pos))
             {
                 return false;
             }
@@ -45,17 +44,10 @@ public class ItemLabeledLever extends ItemLR
             }
             else
             {
-                if (side == EnumFacing.UP || side == EnumFacing.DOWN)
-                {
-                    int i = MathHelper.floor_double((double) ((playerIn.rotationYaw + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
-                    worldIn.setBlockState(pos, ModBlocks.standing_llever.getDefaultState()
-                            .withProperty(BlockStandingLLever.FACING_PROP, BlockStandingLLever.EnumOrientation.getState(side, playerIn.getHorizontalFacing(), playerIn.isSneaking()))
-                            , 3);
-                }
-                else
-                {
-                    worldIn.setBlockState(pos, ModBlocks.wall_llever.getDefaultState().withProperty(BlockWallLLever.FACING_PROP, side), 3);
-                }
+                int i = MathHelper.floor_double((double) ((playerIn.rotationYaw + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
+                worldIn.setBlockState(pos, ModBlocks.block_labeled_lever.getDefaultState()
+                        .withProperty(BlockLabeledLever.FACING_PROP, BlockLabeledLever.EnumOrientation.getState(side, playerIn.getHorizontalFacing(), playerIn.isSneaking()))
+                        , 3);
 
                 --stack.stackSize;
                 TileEntity tileEntity = worldIn.getTileEntity(pos);

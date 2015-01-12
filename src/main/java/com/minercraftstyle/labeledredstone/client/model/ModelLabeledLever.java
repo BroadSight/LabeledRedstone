@@ -27,42 +27,21 @@ public class ModelLabeledLever extends ModelBase
         leverBase.addBox(-3F, -2F, -4F, 6, 3, 8);
         lever = new ModelRenderer(this, 0, 0);
         lever.addBox(-1F, -7F, -1F, 2, 6, 2);
-        setRotation(lever, 0F, 0F, 0F);
 
         postRight = new ModelRenderer(this, 0, 0);
         postRight.addBox(10F, -13F, -1F, 2, 14, 2);
-        postRight.setRotationPoint(0F, 23F, 0F);
-        setRotation(postRight, 0F, 0F, 0F);
         postLeft = new ModelRenderer(this, 0, 0);
         postLeft.addBox(-12F, -13F, -1F, 2, 14, 2);
-        postLeft.setRotationPoint(0F, 23F, 0F);
-        setRotation(postLeft, 0F, 0F, 0F);
         signBoard = new ModelRenderer(this, 0, 0);
         signBoard.addBox(-12F, -25F, -1F, 24, 12, 2);
-        signBoard.setRotationPoint(0F, 23F, 0F);
-        setRotation(signBoard, 0F, 0F, 0F);
-    }
-  
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
-    {
-        super.render(entity, f, f1, f2, f3, f4, f5);
-        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        leverBase.render(f5);
-        lever.render(f5);
-        postRight.render(f5);
-        postLeft.render(f5);
-        signBoard.render(f5);
-    }
-  
-    private void setRotation(ModelRenderer model, float x, float y, float z)
-    {
-        model.rotateAngleX = x;
-        model.rotateAngleY = y;
-        model.rotateAngleZ = z;
     }
 
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
+    public void renderLabeledLever()
     {
-        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        this.leverBase.render(0.0F);
+        this.lever.render(0.0F);
+        this.signBoard.render(0.0625F);
+        this.postLeft.render(0.0625F);
+        this.postRight.render(0.0625F);
     }
 }

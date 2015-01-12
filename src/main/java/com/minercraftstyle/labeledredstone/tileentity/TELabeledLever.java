@@ -1,6 +1,8 @@
 package com.minercraftstyle.labeledredstone.tileentity;
 
 import com.google.gson.JsonParseException;
+import com.minercraftstyle.labeledredstone.network.PacketHandler;
+import com.minercraftstyle.labeledredstone.network.message.LabeledRedstoneMessage;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandResultStats;
 import net.minecraft.command.ICommandSender;
@@ -17,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class TELabeledLever extends TileEntity
 {
     public final IChatComponent[] signText = new IChatComponent[] {new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText("")};
-    public final int rotation = 0;
+    public int rotation = 0;
     public int lineBeingEdited = -1;
     private boolean isEditable = true;
     private EntityPlayer player;
@@ -32,6 +34,8 @@ public class TELabeledLever extends TileEntity
             String s = IChatComponent.Serializer.componentToJson(this.signText[i]);
             compound.setString("Text" + (i + 1), s);
         }
+
+        compound.setInteger("Rotation", this.rotation);
 
         this.commandResultStats.func_179670_b(compound);
     }
@@ -101,6 +105,8 @@ public class TELabeledLever extends TileEntity
             }
         }
 
+        this.rotation = compound.getInteger("Rotation");
+
         this.commandResultStats.func_179668_a(compound);
     }
 
@@ -108,7 +114,9 @@ public class TELabeledLever extends TileEntity
     {
         IChatComponent[] aichatcomponent = new IChatComponent[4];
         System.arraycopy(this.signText, 0, aichatcomponent, 0, 4);
-        //return new PacketUpdateLLever(this.worldObj, this.pos, aichatcomponent);
+        return new LabeledRedstoneMessage(this.pos, aichatcomponent);
+
+
         return (Packet)null;
     }
 

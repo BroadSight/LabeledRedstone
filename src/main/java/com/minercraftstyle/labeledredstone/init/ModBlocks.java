@@ -1,24 +1,19 @@
 package com.minercraftstyle.labeledredstone.init;
 
-import com.minercraftstyle.labeledredstone.block.BlockStandingLLever;
-import com.minercraftstyle.labeledredstone.block.BlockWallLLever;
-import com.minercraftstyle.labeledredstone.client.model.ModelHelper;
+import com.minercraftstyle.labeledredstone.block.BlockLabeledLever;
 import com.minercraftstyle.labeledredstone.reference.Reference;
 import com.minercraftstyle.labeledredstone.util.LogHelper;
-import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @GameRegistry.ObjectHolder(Reference.MOD_ID)
 public class ModBlocks
 {
     //put blocks here
-    public static final BlockStandingLLever standing_llever = new BlockStandingLLever();
-    public static final BlockWallLLever wall_llever = new BlockWallLLever();
+    public static final BlockLabeledLever block_labeled_lever = new BlockLabeledLever();
 
     public static void init()
     {
-        GameRegistry.registerBlock(standing_llever, "standing_llever");
-        GameRegistry.registerBlock(wall_llever, "wall_llever");
+        GameRegistry.registerBlock(block_labeled_lever, "block_labeled_lever");
 
         LogHelper.info("Block Initialization Complete");
     }
