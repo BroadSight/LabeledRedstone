@@ -2,10 +2,8 @@ package com.minercraftstyle.labeledredstone.client.gui;
 
 import com.minercraftstyle.labeledredstone.LabeledRedstone;
 import com.minercraftstyle.labeledredstone.network.message.LabeledRedstoneMessage;
-import com.minercraftstyle.labeledredstone.tileentity.TELabeledLever;
+import com.minercraftstyle.labeledredstone.tileentity.TELabeledRedstone;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockState;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -13,26 +11,24 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
-import scala.Array;
 
 import java.io.IOException;
 
 @SideOnly(Side.CLIENT)
 public class GuiLabeledRedstone extends GuiScreen
 {
-    private TELabeledLever teLabeledLever;
+    private TELabeledRedstone teLabeledRedstone;
     private int updateCounter;
     private int editLine;
     private GuiButton doneBtn;
 
-    public GuiLabeledRedstone(TELabeledLever te)
+    public GuiLabeledRedstone(TELabeledRedstone te)
     {
-        teLabeledLever = te;
+        teLabeledRedstone = te;
     }
 
     public void initGui()
@@ -40,16 +36,13 @@ public class GuiLabeledRedstone extends GuiScreen
         this.buttonList.clear();
         Keyboard.enableRepeatEvents(true);
         this.buttonList.add(this.doneBtn = new GuiButton(0, this.width / 2 - 100, this.height / 4 + 120, I18n.format("gui.done", new Object[0])));
-        this.teLabeledLever.setEditable(false);
+        this.teLabeledRedstone.setEditable(false);
     }
 
     public void onGuiClosed()
     {
         Keyboard.enableRepeatEvents(false);
-
-        IChatComponent[] msgLines = new IChatComponent[] {};
-        System.arraycopy(teLabeledLever.signText, 0, msgLines, 0, 4);
-        LabeledRedstoneMessage message = new LabeledRedstoneMessage(teLabeledLever.getPos(), msgLines);
+        LabeledRedstoneMessage message = new LabeledRedstoneMessage(teLabeledRedstone);
         LabeledRedstone.network.sendToServer(message);
     }
 
@@ -64,7 +57,7 @@ public class GuiLabeledRedstone extends GuiScreen
         {
             if (button.id == 0)
             {
-                this.teLabeledLever.markDirty();
+                this.teLabeledRedstone.markDirty();
                 this.mc.displayGuiScreen((GuiScreen)null);
             }
         }
@@ -82,7 +75,7 @@ public class GuiLabeledRedstone extends GuiScreen
             this.editLine = this.editLine + 1 & 3;
         }
 
-        String s = this.teLabeledLever.signText[this.editLine].getFormattedText();
+        String s = this.teLabeledRedstone.signText[this.editLine].getFormattedText();
 
         if (keyCode == 14 && s.length() > 0)
         {
@@ -94,7 +87,7 @@ public class GuiLabeledRedstone extends GuiScreen
             s = s + typedChar;
         }
 
-        this.teLabeledLever.signText[this.editLine] = new ChatComponentText(s);
+        this.teLabeledRedstone.signText[this.editLine] = new ChatComponentText(s);
 
         if (keyCode == 1)
         {
@@ -112,20 +105,20 @@ public class GuiLabeledRedstone extends GuiScreen
         float f1 = 93.75F;
         GlStateManager.scale(-f1, -f1, -f1);
         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
-        Block block = this.teLabeledLever.getBlockType();
+        Block block = this.teLabeledRedstone.getBlockType();
 
-        float f = (float)(this.teLabeledLever.rotation * 360) / 16.0F;
+        float f = (float)(this.teLabeledRedstone.rotation * 360) / 16.0F;
 
         GlStateManager.rotate(f, 0.0F, 1.0F, 0.0F);
         GlStateManager.translate(0.0F, -1.0625F, 0.0F);
 
         if (this.updateCounter / 6 % 2 == 0)
         {
-            this.teLabeledLever.lineBeingEdited = this.editLine;
+            this.teLabeledRedstone.lineBeingEdited = this.editLine;
         }
 
-        TileEntityRendererDispatcher.instance.renderTileEntityAt(this.teLabeledLever, -0.5D, -0.75D, -0.5D, 0.0F);
-        this.teLabeledLever.lineBeingEdited = -1;
+        TileEntityRendererDispatcher.instance.renderTileEntityAt(this.teLabeledRedstone, -0.5D, -0.75D, -0.5D, 0.0F);
+        this.teLabeledRedstone.lineBeingEdited = -1;
         GlStateManager.popMatrix();
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

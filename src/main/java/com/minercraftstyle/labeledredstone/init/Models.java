@@ -9,7 +9,6 @@ public class Models
 {
     // Items
     public static final Item item_labeled_lever = GameRegistry.findItem(Reference.MOD_ID, "labeled_lever");
-    public static final Item item_test = GameRegistry.findItem(Reference.MOD_ID, "test");
 
     // Blocks
 
@@ -17,7 +16,6 @@ public class Models
     {
         // Items
         ModelHelper.registerItem(item_labeled_lever, "labeled_lever");
-        ModelHelper.registerItem(item_test, "test");
 
         // Blocks
     }

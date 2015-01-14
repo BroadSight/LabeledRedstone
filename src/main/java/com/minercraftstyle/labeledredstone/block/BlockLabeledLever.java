@@ -1,7 +1,7 @@
 package com.minercraftstyle.labeledredstone.block;
 
 import com.minercraftstyle.labeledredstone.init.ModItems;
-import com.minercraftstyle.labeledredstone.tileentity.TELabeledLever;
+import com.minercraftstyle.labeledredstone.tileentity.TELabeledRedstone;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -100,7 +100,7 @@ public class BlockLabeledLever extends BlockLRContainer
 
     public TileEntity createNewTileEntity(World worldIn, int meta)
     {
-        return new TELabeledLever();
+        return new TELabeledRedstone();
     }
 
     public Item getItemDropped(IBlockState state, Random rand, int fortune)

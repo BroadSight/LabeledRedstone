@@ -1,22 +1,24 @@
 package com.minercraftstyle.labeledredstone.tileentity;
 
 import com.google.gson.JsonParseException;
-import com.minercraftstyle.labeledredstone.network.PacketHandler;
+import com.minercraftstyle.labeledredstone.LabeledRedstone;
 import com.minercraftstyle.labeledredstone.network.message.LabeledRedstoneMessage;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandResultStats;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.event.ClickEvent;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TELabeledLever extends TileEntity
+public class TELabeledRedstone extends TileEntity
 {
     public final IChatComponent[] signText = new IChatComponent[] {new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText("")};
     public int rotation = 0;
@@ -61,15 +63,15 @@ public class TELabeledLever extends TileEntity
             }
             public BlockPos getPosition()
             {
-                return TELabeledLever.this.pos;
+                return TELabeledRedstone.this.pos;
             }
             public Vec3 getPositionVector()
             {
-                return new Vec3((double)TELabeledLever.this.pos.getX() + 0.5D, (double)TELabeledLever.this.pos.getY() + 0.5D, (double)TELabeledLever.this.pos.getZ() + 0.5D);
+                return new Vec3((double)TELabeledRedstone.this.pos.getX() + 0.5D, (double)TELabeledRedstone.this.pos.getY() + 0.5D, (double)TELabeledRedstone.this.pos.getZ() + 0.5D);
             }
             public World getEntityWorld()
             {
-                return TELabeledLever.this.worldObj;
+                return TELabeledRedstone.this.worldObj;
             }
             public Entity getCommandSenderEntity()
             {
@@ -112,12 +114,7 @@ public class TELabeledLever extends TileEntity
 
     public Packet getDescriptionPacket()
     {
-        IChatComponent[] aichatcomponent = new IChatComponent[4];
-        System.arraycopy(this.signText, 0, aichatcomponent, 0, 4);
-        return new LabeledRedstoneMessage(this.pos, aichatcomponent);
-
-
-        return (Packet)null;
+        return LabeledRedstone.network.getPacketFrom(new LabeledRedstoneMessage(this));
     }
 
     public boolean getIsEditable()
@@ -151,10 +148,67 @@ public class TELabeledLever extends TileEntity
         return rotation;
     }
 
-    public boolean guiEventHandler(EntityPlayer playerIn)
+    public boolean guiEventHandler(final EntityPlayer playerIn)
     {
         //stuff i dont get right now...
         //net.minecraft.tileentity.TileEntitySign.func_174882_b(EntityPlayer player)
+
+        ICommandSender icommandsender = new ICommandSender()
+        {
+            private static final String __OBFID = "CL_00002038";
+            public String getName()
+            {
+                return playerIn.getName();
+            }
+            public IChatComponent getDisplayName()
+            {
+                return playerIn.getDisplayName();
+            }
+            public void addChatMessage(IChatComponent component) {}
+            public boolean canUseCommand(int permLevel, String commandName)
+            {
+                return true;
+            }
+            public BlockPos getPosition()
+            {
+                return TELabeledRedstone.this.pos;
+            }
+            public Vec3 getPositionVector()
+            {
+                return new Vec3((double)TELabeledRedstone.this.pos.getX() + 0.5D, (double)TELabeledRedstone.this.pos.getY() + 0.5D, (double)TELabeledRedstone.this.pos.getZ() + 0.5D);
+            }
+            public World getEntityWorld()
+            {
+                return playerIn.getEntityWorld();
+            }
+            public Entity getCommandSenderEntity()
+            {
+                return playerIn;
+            }
+            public boolean sendCommandFeedback()
+            {
+                return false;
+            }
+            public void setCommandStat(CommandResultStats.Type type, int amount)
+            {
+                TELabeledRedstone.this.commandResultStats.func_179672_a(this, type, amount);
+            }
+        };
+
+        for (int i = 0; i < this.signText.length; ++i)
+        {
+            ChatStyle chatstyle = this.signText[i] == null ? null : this.signText[i].getChatStyle();
+
+            if (chatstyle != null && chatstyle.getChatClickEvent() != null)
+            {
+                ClickEvent clickevent = chatstyle.getChatClickEvent();
+
+                if (clickevent.getAction() == ClickEvent.Action.RUN_COMMAND)
+                {
+                    MinecraftServer.getServer().getCommandManager().executeCommand(icommandsender, clickevent.getValue());
+                }
+            }
+        }
 
         return true;
     }

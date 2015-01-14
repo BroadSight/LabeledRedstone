@@ -1,8 +1,9 @@
 package com.minercraftstyle.labeledredstone.item;
 
+import com.minercraftstyle.labeledredstone.LabeledRedstone;
 import com.minercraftstyle.labeledredstone.block.BlockLabeledLever;
 import com.minercraftstyle.labeledredstone.init.ModBlocks;
-import com.minercraftstyle.labeledredstone.tileentity.TELabeledLever;
+import com.minercraftstyle.labeledredstone.tileentity.TELabeledRedstone;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -52,9 +53,9 @@ public class ItemLabeledLever extends ItemLR
                 --stack.stackSize;
                 TileEntity tileEntity = worldIn.getTileEntity(pos);
 
-                if (tileEntity instanceof TELabeledLever && !ItemBlock.setTileEntityNBT(worldIn, pos, stack))
+                if (tileEntity instanceof TELabeledRedstone && !ItemBlock.setTileEntityNBT(worldIn, pos, stack))
                 {
-                    //packet handling and gui loading
+                    playerIn.openGui(LabeledRedstone.instance, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
                 }
 
                 return true;

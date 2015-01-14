@@ -12,12 +12,10 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ModItems
 {
     //put items here
-    public static final ItemLR test = new ItemLR("test");
     public static final ItemLabeledLever labeled_lever = new ItemLabeledLever();
 
     public static void init()
     {
-        GameRegistry.registerItem(test, "test");
         GameRegistry.registerItem(labeled_lever, "labeled_lever");
 
         LogHelper.info("Item Initialization Complete");

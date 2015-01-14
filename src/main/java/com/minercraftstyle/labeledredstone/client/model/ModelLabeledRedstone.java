@@ -13,21 +13,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelLabeledLever extends ModelBase
+public class ModelLabeledRedstone extends ModelBase
 {
-    public ModelRenderer leverBase;
-    public ModelRenderer lever;
     public ModelRenderer postRight;
     public ModelRenderer postLeft;
     public ModelRenderer signBoard;
   
-    public ModelLabeledLever()
+    public ModelLabeledRedstone()
     {
-        leverBase = new ModelRenderer(this, 0, 0);
-        leverBase.addBox(-3F, -2F, -4F, 6, 3, 8);
-        lever = new ModelRenderer(this, 0, 0);
-        lever.addBox(-1F, -7F, -1F, 2, 6, 2);
-
         postRight = new ModelRenderer(this, 0, 0);
         postRight.addBox(10F, -13F, -1F, 2, 14, 2);
         postLeft = new ModelRenderer(this, 0, 0);
@@ -36,10 +29,8 @@ public class ModelLabeledLever extends ModelBase
         signBoard.addBox(-12F, -25F, -1F, 24, 12, 2);
     }
 
-    public void renderLabeledLever()
+    public void renderLabeledRedstone()
     {
-        this.leverBase.render(0.0F);
-        this.lever.render(0.0F);
         this.signBoard.render(0.0625F);
         this.postLeft.render(0.0625F);
         this.postRight.render(0.0625F);
