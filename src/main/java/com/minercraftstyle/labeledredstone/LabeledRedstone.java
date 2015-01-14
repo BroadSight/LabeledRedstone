@@ -3,6 +3,7 @@ package com.minercraftstyle.labeledredstone;
 import com.minercraftstyle.labeledredstone.handler.ConfigurationHandler;
 import com.minercraftstyle.labeledredstone.init.*;
 import com.minercraftstyle.labeledredstone.network.message.LabeledRedstoneMessage;
+import com.minercraftstyle.labeledredstone.proxy.CommonProxy;
 import com.minercraftstyle.labeledredstone.proxy.IProxy;
 import com.minercraftstyle.labeledredstone.reference.Reference;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -22,7 +23,7 @@ public class LabeledRedstone
     public static LabeledRedstone instance;
 
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
-    public static IProxy proxy;
+    public static CommonProxy proxy;
 
     public static SimpleNetworkWrapper network;
 
@@ -46,6 +47,8 @@ public class LabeledRedstone
     {
         Models.init();
         Recipes.init();
+
+        proxy.init();
     }
 
     @Mod.EventHandler

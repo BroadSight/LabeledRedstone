@@ -4,6 +4,7 @@ import com.minercraftstyle.labeledredstone.LabeledRedstone;
 import com.minercraftstyle.labeledredstone.block.BlockLabeledLever;
 import com.minercraftstyle.labeledredstone.init.ModBlocks;
 import com.minercraftstyle.labeledredstone.tileentity.TELabeledRedstone;
+import com.minercraftstyle.labeledredstone.util.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;

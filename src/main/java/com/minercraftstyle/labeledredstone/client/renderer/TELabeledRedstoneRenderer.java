@@ -5,6 +5,7 @@ import com.minercraftstyle.labeledredstone.client.model.ModelLabeledRedstone;
 import com.minercraftstyle.labeledredstone.reference.Reference;
 import com.minercraftstyle.labeledredstone.tileentity.TELabeledRedstone;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
@@ -21,7 +22,8 @@ import java.util.List;
 
 public class TELabeledRedstoneRenderer extends TileEntitySpecialRenderer
 {
-    private static final ResourceLocation location = new ResourceLocation(Reference.MOD_ID.toLowerCase() + ":textures/entity/labeled_lever.png");
+    private static final ResourceLocation location = new ResourceLocation("minecraft:textures/entity/sign.png");
+    //Reference.MOD_ID.toLowerCase() + ":textures/entity/labeled_lever.png"
     private final ModelLabeledRedstone model = new ModelLabeledRedstone();
 
     public void render(TELabeledRedstone te, double x, double y, double z, float f, int i1)
@@ -134,13 +136,13 @@ public class TELabeledRedstoneRenderer extends TileEntitySpecialRenderer
 
     private boolean testStanding(TELabeledRedstone te)
     {
-        Block block = te.getBlockType();
+        IBlockState state = getWorld().getBlockState(te.getPos());
+
+        Block block = state.getBlock();
 
         if (block instanceof BlockLabeledLever)
         {
-            BlockLabeledLever blockLabeledLever = (BlockLabeledLever) block;
-
-            EnumFacing facing = ((BlockLabeledLever.EnumOrientation)((IBlockState) blockLabeledLever.getBlockState()).getValue(BlockLabeledLever.FACING_PROP)).getDirection();
+            EnumFacing facing = ((BlockLabeledLever.EnumOrientation)state.getValue(BlockLabeledLever.FACING_PROP)).getDirection();
 
             if (facing == EnumFacing.UP || facing == EnumFacing.DOWN)
             {
