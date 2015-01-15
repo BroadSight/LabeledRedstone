@@ -2,16 +2,13 @@ package com.minercraftstyle.labeledredstone.client.renderer;
 
 import com.minercraftstyle.labeledredstone.block.BlockLabeledLever;
 import com.minercraftstyle.labeledredstone.client.model.ModelLabeledRedstone;
-import com.minercraftstyle.labeledredstone.reference.Reference;
 import com.minercraftstyle.labeledredstone.tileentity.TELabeledRedstone;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
@@ -23,26 +20,36 @@ import java.util.List;
 public class TELabeledRedstoneRenderer extends TileEntitySpecialRenderer
 {
     private static final ResourceLocation location = new ResourceLocation("minecraft:textures/entity/sign.png");
-    //Reference.MOD_ID.toLowerCase() + ":textures/entity/labeled_lever.png"
     private final ModelLabeledRedstone model = new ModelLabeledRedstone();
 
     public void render(TELabeledRedstone te, double x, double y, double z, float f, int i1)
     {
+        EnumFacing facing = getFacing(te);
+
         GlStateManager.pushMatrix();
         float f1 = 0.6666667F;
         float f3;
 
-        if (testStanding(te))
+        if (facing == EnumFacing.UP)
         {
             GlStateManager.translate((float)x + 0.5F, (float)y + 0.75F * f1, (float)z + 0.5F);
-            float f2 = (float)(te.getBlockMetadata() * 360) / 16.0F;
+            float f2 = (float)(te.getRotation() * 360) / 16.0F;
+            GlStateManager.rotate(-f2, 0.0F, 1.0F, 0.0F);
+            this.model.postLeft.showModel = true;
+            this.model.postRight.showModel = true;
+        }
+        else if (facing == EnumFacing.DOWN)
+        {
+            GlStateManager.translate((float)x + 0.5F, (float)y + 0.75F * f1, (float)z + 0.5F);
+            GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
+            float f2 = (float)(te.getRotation() * 360) / 16.0F;
             GlStateManager.rotate(-f2, 0.0F, 1.0F, 0.0F);
             this.model.postLeft.showModel = true;
             this.model.postRight.showModel = true;
         }
         else
         {
-            int k = te.getBlockMetadata();
+            int k = facing.getIndex();
             f3 = 0.0F;
 
             if (k == 2)
@@ -136,26 +143,36 @@ public class TELabeledRedstoneRenderer extends TileEntitySpecialRenderer
 
     private boolean testStanding(TELabeledRedstone te)
     {
-        IBlockState state = getWorld().getBlockState(te.getPos());
+        EnumFacing facing = getFacing(te);
 
-        Block block = state.getBlock();
-
-        if (block instanceof BlockLabeledLever)
+        if (facing == EnumFacing.UP || facing == EnumFacing.DOWN)
         {
-            EnumFacing facing = ((BlockLabeledLever.EnumOrientation)state.getValue(BlockLabeledLever.FACING_PROP)).getDirection();
-
-            if (facing == EnumFacing.UP || facing == EnumFacing.DOWN)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return true;
         }
         else
         {
             return false;
         }
+
+    }
+
+    private EnumFacing getFacing(TELabeledRedstone te)
+    {
+        IBlockState state = getWorld().getBlockState(te.getPos());
+
+        Block block = state.getBlock();
+
+        EnumFacing facing;
+
+        if (block instanceof BlockLabeledLever)
+        {
+            facing = ((BlockLabeledLever.EnumOrientation) state.getValue(BlockLabeledLever.FACING_PROP)).getDirection();
+        }
+        else
+        {
+            facing = EnumFacing.UP;
+        }
+
+        return facing;
     }
 }

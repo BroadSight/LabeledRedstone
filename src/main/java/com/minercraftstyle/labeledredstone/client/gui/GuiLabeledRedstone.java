@@ -3,6 +3,7 @@ package com.minercraftstyle.labeledredstone.client.gui;
 import com.minercraftstyle.labeledredstone.LabeledRedstone;
 import com.minercraftstyle.labeledredstone.network.message.LabeledRedstoneMessage;
 import com.minercraftstyle.labeledredstone.tileentity.TELabeledRedstone;
+import com.minercraftstyle.labeledredstone.util.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -29,14 +30,20 @@ public class GuiLabeledRedstone extends GuiScreen
     public GuiLabeledRedstone(TELabeledRedstone te)
     {
         teLabeledRedstone = te;
+
+        LogHelper.info("Gui constructor");
     }
 
     public void initGui()
     {
+        LogHelper.info("Gui init start");
+
         this.buttonList.clear();
         Keyboard.enableRepeatEvents(true);
         this.buttonList.add(this.doneBtn = new GuiButton(0, this.width / 2 - 100, this.height / 4 + 120, I18n.format("gui.done", new Object[0])));
         this.teLabeledRedstone.setEditable(false);
+
+        LogHelper.info("   end");
     }
 
     public void onGuiClosed()
@@ -97,6 +104,8 @@ public class GuiLabeledRedstone extends GuiScreen
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
+        LogHelper.info("Gui draw screen start");
+
         this.drawDefaultBackground();
         this.drawCenteredString(this.fontRendererObj, I18n.format("sign.edit", new Object[0]), this.width / 2, 40, 16777215);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -121,5 +130,7 @@ public class GuiLabeledRedstone extends GuiScreen
         this.teLabeledRedstone.lineBeingEdited = -1;
         GlStateManager.popMatrix();
         super.drawScreen(mouseX, mouseY, partialTicks);
+
+        LogHelper.info("   end");
     }
 }

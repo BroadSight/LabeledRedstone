@@ -47,39 +47,34 @@ public class BlockLabeledLever extends BlockLRContainer
         return super.getSelectedBoundingBox(worldIn, pos);
     }
 
-    public void setBlockBoundsBasedOnState(IBlockAccess access, BlockPos pos)
+    public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos)
     {
-        EnumFacing enumFacing = (EnumFacing)((EnumOrientation)access.getBlockState(pos).getValue(FACING_PROP)).getDirection();
+        float f = 0.1875F;
+        float f1 = 0.0625F;
 
-        if (enumFacing == EnumFacing.UP || enumFacing == EnumFacing.DOWN)
+        switch (BlockLabeledLever.SwitchEnumFacing.ORIENTATION_LOOKUP[((BlockLabeledLever.EnumOrientation)worldIn.getBlockState(pos).getValue(FACING_PROP)).ordinal()])
         {
-            float f = 0.5F,
-                  f1 = 0.25F;
-            this.setBlockBounds(f - f1, 0.0F, f - f1, f + f1, 1.0F, f + f1);
-        }
-        else
-        {
-            float f = 0.28125F,
-                    f1 = 0.78125F,
-                    f2 = 0.0F,
-                    f3 = 1.0F,
-                    f4 = 0.125F;
-            this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-
-            switch (BlockLabeledLever.SwitchEnumFacing.FACING_LOOKUP[enumFacing.ordinal()])
-            {
-                case 3:
-                    this.setBlockBounds(f2, f, 1.0F - f4, f3, f1, 1.0F);
-                    break;
-                case 4:
-                    this.setBlockBounds(f2, f, 0.0F, f3, f1, f4);
-                    break;
-                case 5:
-                    this.setBlockBounds(1.0F - f4, f, f2, 1.0F, f1, f3);
-                    break;
-                case 6:
-                    this.setBlockBounds(0.0F, f, f2, f4, f1, f3);
-            }
+            case 1:
+                this.setBlockBounds(0.0F, f1, 0.2F, f * 2.0F, 0.5F - f1, 0.8F);
+                break;
+            case 2:
+                this.setBlockBounds(1.0F - f * 2.0F, f1, 0.2F, 1.0F,  0.5F - f1, 0.8F);
+                break;
+            case 3:
+                this.setBlockBounds(0.2F, f1, 0.0F, 0.8F,  0.5F - f1, f * 2.0F);
+                break;
+            case 4:
+                this.setBlockBounds(0.2F, f1, 1.0F - f * 2.0F, 0.8F,  0.5F - f1, 1.0F);
+                break;
+            case 5:
+            case 6:
+                f = 0.25F;
+                this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.6F, 0.5F + f);
+                break;
+            case 7:
+            case 8:
+                f = 0.25F;
+                this.setBlockBounds(0.5F - f, 0.4F, 0.5F - f, 0.5F + f, 1.0F, 0.5F + f);
         }
     }
 
@@ -149,13 +144,6 @@ public class BlockLabeledLever extends BlockLRContainer
         return new BlockState(this, new IProperty[] {FACING_PROP, POWERED_PROP});
     }
 
-    /*
-    public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side)
-    {
-        return side == EnumFacing.UP || side == EnumFacing.DOWN;
-    }
-    */
-
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
     {
         return worldIn.isSideSolid(pos.offset(EnumFacing.DOWN),  EnumFacing.UP)    ||
@@ -165,20 +153,6 @@ public class BlockLabeledLever extends BlockLRContainer
                worldIn.isSideSolid(pos.offset(EnumFacing.EAST),  EnumFacing.WEST)  ||
                worldIn.isSideSolid(pos.offset(EnumFacing.WEST),  EnumFacing.EAST);
     }
-
-    /*
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-    {
-        IBlockState iblockstate = this.getDefaultState().withProperty(POWERED_PROP, Boolean.valueOf(false));
-
-        if (worldIn.isSideSolid(pos.offset(facing.getOpposite()), facing))
-        {
-            return iblockstate.withProperty(FACING_PROP, BlockStandingLLever.EnumOrientation.getState(facing, placer.func_174811_aO(), placer.isSneaking()));
-        }
-        else
-            return iblockstate;
-    }
-    */
 
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
     {
@@ -194,7 +168,9 @@ public class BlockLabeledLever extends BlockLRContainer
             worldIn.notifyNeighborsOfStateChange(pos, this);
             EnumFacing enumFacing = ((BlockLabeledLever.EnumOrientation)state.getValue(FACING_PROP)).getDirection();
             worldIn.notifyNeighborsOfStateChange(pos.offset(enumFacing.getOpposite()), this);
-            return true;
+
+            TileEntity tile = worldIn.getTileEntity(pos);
+            return tile instanceof TELabeledRedstone ? ((TELabeledRedstone)tile).guiEventHandler(playerIn) : false;
         }
     }
 

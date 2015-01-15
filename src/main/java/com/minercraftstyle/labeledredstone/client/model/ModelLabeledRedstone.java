@@ -8,7 +8,6 @@ package com.minercraftstyle.labeledredstone.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -21,12 +20,12 @@ public class ModelLabeledRedstone extends ModelBase
   
     public ModelLabeledRedstone()
     {
-        postRight = new ModelRenderer(this, 0, 0);
-        postRight.addBox(10F, -13F, -1F, 2, 14, 2);
-        postLeft = new ModelRenderer(this, 0, 0);
-        postLeft.addBox(-12F, -13F, -1F, 2, 14, 2);
+        postRight = new ModelRenderer(this, 0, 14);
+        postRight.addBox(10F, -2F, -1F, 2, 14, 2);
+        postLeft = new ModelRenderer(this, 0, 14);
+        postLeft.addBox(-12F, -2F, -1F, 2, 14, 2);
         signBoard = new ModelRenderer(this, 0, 0);
-        signBoard.addBox(-12F, -25F, -1F, 24, 12, 2);
+        signBoard.addBox(-12.0F, -14.0F, -1.0F, 24, 12, 2, 0.0F);
     }
 
     public void renderLabeledRedstone()

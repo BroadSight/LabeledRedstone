@@ -150,9 +150,6 @@ public class TELabeledRedstone extends TileEntity
 
     public boolean guiEventHandler(final EntityPlayer playerIn)
     {
-        //stuff i dont get right now...
-        //net.minecraft.tileentity.TileEntitySign.func_174882_b(EntityPlayer player)
-
         ICommandSender icommandsender = new ICommandSender()
         {
             private static final String __OBFID = "CL_00002038";
@@ -209,6 +206,8 @@ public class TELabeledRedstone extends TileEntity
                 }
             }
         }
+
+        this.rotation = MathHelper.floor_double((double)((playerIn.rotationYaw + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
 
         return true;
     }
