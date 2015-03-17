@@ -4,7 +4,6 @@ import com.minercraftstyle.labeledredstone.handler.ConfigurationHandler;
 import com.minercraftstyle.labeledredstone.init.*;
 import com.minercraftstyle.labeledredstone.network.message.LabeledRedstoneMessage;
 import com.minercraftstyle.labeledredstone.proxy.CommonProxy;
-import com.minercraftstyle.labeledredstone.proxy.IProxy;
 import com.minercraftstyle.labeledredstone.reference.Reference;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -32,6 +31,8 @@ public class LabeledRedstone
     {
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
         FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
+
+        NetworkRegistry.INSTANCE.registerGuiHandler(instance, new CommonProxy());
 
         network = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID + ":Channel");
         network.registerMessage(LabeledRedstoneMessage.ClientHandler.class, LabeledRedstoneMessage.class, 0, Side.CLIENT);

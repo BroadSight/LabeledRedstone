@@ -21,6 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class TELabeledRedstone extends TileEntity
 {
     public final IChatComponent[] signText = new IChatComponent[] {new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText("")};
+
     public int rotation = 0;
     public int lineBeingEdited = -1;
     private boolean isEditable = true;
@@ -48,16 +49,16 @@ public class TELabeledRedstone extends TileEntity
         super.readFromNBT(compound);
         ICommandSender iCommandSender = new ICommandSender()
         {
-            public String getName()
+            public String getCommandSenderName()
             {
                 return "LabeledLever";
             }
             public IChatComponent getDisplayName()
             {
-                return new ChatComponentText(this.getName());
+                return new ChatComponentText(this.getCommandSenderName());
             }
             public void addChatMessage(IChatComponent message) {}
-            public boolean canUseCommand(int permLevel, String command)
+            public boolean canCommandSenderUseCommand(int permLevel, String command)
             {
                 return true;
             }
@@ -94,7 +95,7 @@ public class TELabeledRedstone extends TileEntity
 
                 try
                 {
-                    this.signText[i] = ChatComponentProcessor.func_179985_a(iCommandSender, iChatComponent, (Entity)null);
+                    this.signText[i] = ChatComponentProcessor.processComponent(iCommandSender, iChatComponent, (Entity) null);
                 }
                 catch (CommandException commandException)
                 {
@@ -148,21 +149,27 @@ public class TELabeledRedstone extends TileEntity
         return rotation;
     }
 
-    public boolean guiEventHandler(final EntityPlayer playerIn)
+    public void setRotation(int rotation)
+    {
+        this.rotation = rotation;
+
+        this.markDirty();
+    }
+
+    public boolean executeCommand(final EntityPlayer playerIn)
     {
         ICommandSender icommandsender = new ICommandSender()
         {
-            private static final String __OBFID = "CL_00002038";
-            public String getName()
+            public String getCommandSenderName()
             {
-                return playerIn.getName();
+                return playerIn.getCommandSenderName();
             }
             public IChatComponent getDisplayName()
             {
                 return playerIn.getDisplayName();
             }
             public void addChatMessage(IChatComponent component) {}
-            public boolean canUseCommand(int permLevel, String commandName)
+            public boolean canCommandSenderUseCommand(int permLevel, String commandName)
             {
                 return true;
             }
@@ -206,8 +213,6 @@ public class TELabeledRedstone extends TileEntity
                 }
             }
         }
-
-        this.rotation = MathHelper.floor_double((double)((playerIn.rotationYaw + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
 
         return true;
     }

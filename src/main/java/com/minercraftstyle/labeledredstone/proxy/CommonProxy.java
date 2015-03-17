@@ -5,7 +5,6 @@ import com.minercraftstyle.labeledredstone.container.ContainerLabeledRedstone;
 import com.minercraftstyle.labeledredstone.tileentity.TELabeledRedstone;
 import com.minercraftstyle.labeledredstone.util.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
@@ -20,11 +19,14 @@ public class CommonProxy implements IGuiHandler
     {
         LogHelper.info("Proxy.getClientGuiElement");
         TELabeledRedstone te = (TELabeledRedstone) world.getTileEntity(new BlockPos(x,y,z));
+
         if (te != null)
         {
+            LogHelper.info("   return Gui");
             return new GuiLabeledRedstone(te);
         }
 
+        LogHelper.info("   return null");
         return null;
     }
 
@@ -36,9 +38,11 @@ public class CommonProxy implements IGuiHandler
 
         if (te != null)
         {
+            LogHelper.info("   return Container");
             return new ContainerLabeledRedstone(player, te);
         }
 
+        LogHelper.info("   return null");
         return null;
     }
 

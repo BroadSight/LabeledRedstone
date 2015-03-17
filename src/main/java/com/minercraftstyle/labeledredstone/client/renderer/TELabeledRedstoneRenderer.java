@@ -33,7 +33,7 @@ public class TELabeledRedstoneRenderer extends TileEntitySpecialRenderer
         if (facing == EnumFacing.UP)
         {
             GlStateManager.translate((float)x + 0.5F, (float)y + 0.75F * f1, (float)z + 0.5F);
-            float f2 = (float)(te.getRotation() * 360) / 16.0F;
+            float f2 = (float)(te.getRotation() * 360.0F) / 16.0F;
             GlStateManager.rotate(-f2, 0.0F, 1.0F, 0.0F);
             this.model.postLeft.showModel = true;
             this.model.postRight.showModel = true;
@@ -42,8 +42,8 @@ public class TELabeledRedstoneRenderer extends TileEntitySpecialRenderer
         {
             GlStateManager.translate((float)x + 0.5F, (float)y + 0.75F * f1, (float)z + 0.5F);
             GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
-            float f2 = (float)(te.getRotation() * 360) / 16.0F;
-            GlStateManager.rotate(-f2, 0.0F, 1.0F, 0.0F);
+            float f2 = (float)(te.getRotation() * 360.0F) / 16.0F;
+            GlStateManager.rotate(-f2 + 180.0F, 0.0F, 1.0F, 0.0F);
             this.model.postLeft.showModel = true;
             this.model.postRight.showModel = true;
         }
@@ -69,7 +69,7 @@ public class TELabeledRedstoneRenderer extends TileEntitySpecialRenderer
 
             GlStateManager.translate((float)x + 0.5F, (float)y + 0.75F * f1, (float)z + 0.5F);
             GlStateManager.rotate(-f3, 0.0F, 1.0F, 0.0F);
-            GlStateManager.translate(0.0F, -0.3125F, -0.4375F);
+            GlStateManager.translate(0.0F, -0.1F, -0.4375F);
             this.model.postLeft.showModel = false;
             this.model.postRight.showModel = false;
         }

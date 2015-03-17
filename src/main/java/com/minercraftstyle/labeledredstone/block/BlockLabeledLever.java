@@ -170,7 +170,7 @@ public class BlockLabeledLever extends BlockLRContainer
             worldIn.notifyNeighborsOfStateChange(pos.offset(enumFacing.getOpposite()), this);
 
             TileEntity tile = worldIn.getTileEntity(pos);
-            return tile instanceof TELabeledRedstone ? ((TELabeledRedstone)tile).guiEventHandler(playerIn) : false;
+            return tile instanceof TELabeledRedstone ? ((TELabeledRedstone)tile).executeCommand(playerIn) : false;
         }
     }
 
