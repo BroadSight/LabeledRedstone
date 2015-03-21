@@ -41,9 +41,9 @@ public class TELabeledRedstoneRenderer extends TileEntitySpecialRenderer
         else if (facing == EnumFacing.DOWN)
         {
             GlStateManager.translate((float)x + 0.5F, (float)y + 0.75F * f1, (float)z + 0.5F);
-            GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
             float f2 = (float)(te.getRotation() * 360.0F) / 16.0F;
             GlStateManager.rotate(-f2 + 180.0F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
             this.model.postLeft.showModel = true;
             this.model.postRight.showModel = true;
         }

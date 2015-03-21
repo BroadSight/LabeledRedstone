@@ -14,17 +14,14 @@ public class ContainerLabeledRedstone extends Container
     {
         int rotation;
 
-        LogHelper.info("Container constructor");
-
-        LogHelper.info(tile);
         teLabeledRedstone = tile;
 
-        LogHelper.info(player);
         teLabeledRedstone.setPlayer(player);
 
         rotation = MathHelper.floor_double((double) ((player.rotationYaw + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
-        LogHelper.info(rotation);
         teLabeledRedstone.setRotation(rotation);
+
+        teLabeledRedstone.markDirty();
     }
 
     @Override

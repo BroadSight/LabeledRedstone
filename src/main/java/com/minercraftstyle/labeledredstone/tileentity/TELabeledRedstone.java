@@ -3,6 +3,7 @@ package com.minercraftstyle.labeledredstone.tileentity;
 import com.google.gson.JsonParseException;
 import com.minercraftstyle.labeledredstone.LabeledRedstone;
 import com.minercraftstyle.labeledredstone.network.message.LabeledRedstoneMessage;
+import com.minercraftstyle.labeledredstone.util.LogHelper;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandResultStats;
 import net.minecraft.command.ICommandSender;
@@ -30,6 +31,7 @@ public class TELabeledRedstone extends TileEntity
 
     public void writeToNBT(NBTTagCompound compound)
     {
+        LogHelper.info("TE.writeToNBT");
         super.writeToNBT(compound);
 
         for (int i = 0; i < 4; ++i)
@@ -45,6 +47,7 @@ public class TELabeledRedstone extends TileEntity
 
     public void readFromNBT(NBTTagCompound compound)
     {
+        LogHelper.info("TE.readFromNBT");
         this.isEditable = false;
         super.readFromNBT(compound);
         ICommandSender iCommandSender = new ICommandSender()
@@ -152,8 +155,6 @@ public class TELabeledRedstone extends TileEntity
     public void setRotation(int rotation)
     {
         this.rotation = rotation;
-
-        this.markDirty();
     }
 
     public boolean executeCommand(final EntityPlayer playerIn)

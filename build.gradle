@@ -22,7 +22,7 @@ group= "com.minercraftstyle.labeledredstone" // http://maven.apache.org/guides/m
 archivesBaseName = "labeledredstone"
 
 minecraft {
-    version = "1.8-11.14.1.1337"
+    version = "1.8-11.14.1.1341"
     runDir = "eclipse"
     
     // the mappings can be changed at any time, and must be in the following format.

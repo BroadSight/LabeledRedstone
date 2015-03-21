@@ -19,6 +19,7 @@ public class CommonProxy implements IGuiHandler
     {
         LogHelper.info("Proxy.getClientGuiElement");
         TELabeledRedstone te = (TELabeledRedstone) world.getTileEntity(new BlockPos(x,y,z));
+        LogHelper.info("   " + te);
 
         if (te != null)
         {

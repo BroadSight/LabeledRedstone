@@ -158,7 +158,7 @@ public class BlockLabeledLever extends BlockLRContainer
     {
         if(worldIn.isRemote)
         {
-            return true;
+            return false;
         }
         else
         {

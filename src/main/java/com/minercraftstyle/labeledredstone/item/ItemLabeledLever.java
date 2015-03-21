@@ -42,11 +42,10 @@ public class ItemLabeledLever extends ItemLR
             }
             else if (worldIn.isRemote)
             {
-                return true;
+                return false;
             }
             else
             {
-                int i = MathHelper.floor_double((double) ((playerIn.rotationYaw + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
                 worldIn.setBlockState(pos, ModBlocks.block_labeled_lever.getDefaultState()
                         .withProperty(BlockLabeledLever.FACING_PROP, BlockLabeledLever.EnumOrientation.getState(side, playerIn.getHorizontalFacing(), playerIn.isSneaking()))
                         , 3);
