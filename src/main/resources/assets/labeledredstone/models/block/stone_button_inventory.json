@@ -1,0 +1,6 @@
+{
+    "parent": "labeledredstone:block/button_inventory",
+    "textures": {
+        "texture": "blocks/stone"
+    }
+}

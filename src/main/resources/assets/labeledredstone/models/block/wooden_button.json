@@ -1,0 +1,6 @@
+{
+    "parent": "labeledredstone:block/button",
+    "textures": {
+        "texture": "blocks/planks_oak"
+    }
+}

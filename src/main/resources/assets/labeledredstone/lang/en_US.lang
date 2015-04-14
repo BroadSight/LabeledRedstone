@@ -1,4 +1,5 @@
-item.labeledredstone:test.name=Test
 item.labeledredstone:labeledLever.name=Labeled Lever
+item.labeledredstone:labeledButtonWood.name=Labeled Button
+item.labeledredstone:labeledButtonStone.name=Labeled Button
 
 itemGroup.labeledredstone=Labeled Redstone
