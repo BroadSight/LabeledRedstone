@@ -1,10 +1,13 @@
 package com.BroadSight.labeledredstone.init;
 
-import com.BroadSight.labeledredstone.reference.Reference;
 import com.BroadSight.labeledredstone.client.model.ModelHelper;
+import com.BroadSight.labeledredstone.reference.Reference;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class Models
 {
     // Items

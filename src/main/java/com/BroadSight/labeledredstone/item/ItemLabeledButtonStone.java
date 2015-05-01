@@ -1,10 +1,11 @@
 package com.BroadSight.labeledredstone.item;
 
-import com.BroadSight.labeledredstone.init.ModBlocks;
-import com.BroadSight.labeledredstone.tileentity.TELabeledRedstone;
 import com.BroadSight.labeledredstone.LabeledRedstone;
 import com.BroadSight.labeledredstone.block.BlockLabeledButton;
+import com.BroadSight.labeledredstone.init.ModBlocks;
+import com.BroadSight.labeledredstone.tileentity.TELabeledRedstone;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -18,6 +19,7 @@ public class ItemLabeledButtonStone extends ItemLR
     {
         super("labeledButtonStone");
         this.setMaxStackSize(64);
+        this.setContainerItem(Items.sign);
     }
 
     @Override

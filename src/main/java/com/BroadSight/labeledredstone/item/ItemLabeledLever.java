@@ -1,11 +1,12 @@
 package com.BroadSight.labeledredstone.item;
 
-import com.BroadSight.labeledredstone.init.ModBlocks;
 import com.BroadSight.labeledredstone.LabeledRedstone;
 import com.BroadSight.labeledredstone.block.BlockLabeledLever;
+import com.BroadSight.labeledredstone.init.ModBlocks;
 import com.BroadSight.labeledredstone.tileentity.TELabeledRedstone;
 import com.BroadSight.labeledredstone.util.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -19,6 +20,7 @@ public class ItemLabeledLever extends ItemLR
     {
         super("labeledLever");
         this.maxStackSize = 16;
+        this.setContainerItem(Items.sign);
     }
 
     public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
@@ -41,7 +43,7 @@ public class ItemLabeledLever extends ItemLR
             }
             else if (worldIn.isRemote)
             {
-                return false;
+                return true;
             }
             else
             {

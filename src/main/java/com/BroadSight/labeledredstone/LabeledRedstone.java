@@ -1,8 +1,10 @@
 package com.BroadSight.labeledredstone;
 
 import com.BroadSight.labeledredstone.handler.ConfigurationHandler;
-import com.BroadSight.labeledredstone.init.*;
-import com.BroadSight.labeledredstone.network.PacketManager;
+import com.BroadSight.labeledredstone.init.ModBlocks;
+import com.BroadSight.labeledredstone.init.ModItems;
+import com.BroadSight.labeledredstone.init.ModTileEntities;
+import com.BroadSight.labeledredstone.init.Recipes;
 import com.BroadSight.labeledredstone.proxy.CommonProxy;
 import com.BroadSight.labeledredstone.reference.Reference;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -23,7 +25,7 @@ public class LabeledRedstone
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
     public static CommonProxy proxy;
 
-    public static SimpleNetworkWrapper network;
+    public static SimpleNetworkWrapper network = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -41,10 +43,7 @@ public class LabeledRedstone
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
-        Models.init();
         Recipes.init();
-
-        PacketManager.init();
 
         proxy.init();
     }

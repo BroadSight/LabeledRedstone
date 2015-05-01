@@ -1,15 +1,15 @@
 package com.BroadSight.labeledredstone.client.gui;
 
-import com.BroadSight.labeledredstone.network.LRPacket;
-import com.BroadSight.labeledredstone.network.PacketManager;
 import com.BroadSight.labeledredstone.tileentity.TELabeledRedstone;
 import com.BroadSight.labeledredstone.util.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.network.Packet;
 import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.fml.relauncher.Side;
@@ -48,8 +48,17 @@ public class GuiLabeledRedstone extends GuiScreen
     public void onGuiClosed()
     {
         Keyboard.enableRepeatEvents(false);
-        LRPacket message = new LRPacket(teLabeledRedstone);
-        PacketManager.sendToServer(message);
+
+        Packet packet = teLabeledRedstone.getDescriptionPacket();
+
+        NetHandlerPlayClient nethandlerplayclient = this.mc.getNetHandler();
+
+        if (nethandlerplayclient != null)
+        {
+            nethandlerplayclient.addToSendQueue(packet);
+        }
+
+        this.teLabeledRedstone.setEditable(true);
     }
 
     public void updateScreen()

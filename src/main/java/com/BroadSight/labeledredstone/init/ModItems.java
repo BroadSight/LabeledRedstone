@@ -1,8 +1,8 @@
 package com.BroadSight.labeledredstone.init;
 
-import com.BroadSight.labeledredstone.item.ItemLabeledLever;
 import com.BroadSight.labeledredstone.item.ItemLabeledButtonStone;
 import com.BroadSight.labeledredstone.item.ItemLabeledButtonWood;
+import com.BroadSight.labeledredstone.item.ItemLabeledLever;
 import com.BroadSight.labeledredstone.reference.Reference;
 import com.BroadSight.labeledredstone.util.LogHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;

@@ -15,3 +15,17 @@ eclipse/
 *.iml
 *.ipr
 *.iws
+
+# server
+config/
+crash-reports/
+logs/
+world/
+banned-ips.json
+banned-players.json
+eula.txt
+ops.json
+server.properties
+usercache.json
+usernamecache.json
+whitelist.json

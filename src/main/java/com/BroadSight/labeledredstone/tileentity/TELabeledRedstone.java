@@ -1,9 +1,7 @@
 package com.BroadSight.labeledredstone.tileentity;
 
-import com.BroadSight.labeledredstone.network.LRPacket;
-import com.BroadSight.labeledredstone.network.PacketManager;
-import com.google.gson.JsonParseException;
 import com.BroadSight.labeledredstone.util.LogHelper;
+import com.google.gson.JsonParseException;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandResultStats;
 import net.minecraft.command.ICommandSender;
@@ -11,7 +9,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -54,7 +54,7 @@ public class TELabeledRedstone extends TileEntity
         {
             public String getCommandSenderName()
             {
-                return "LabeledLever";
+                return "LabeledRedstone";
             }
             public IChatComponent getDisplayName()
             {
@@ -116,10 +116,18 @@ public class TELabeledRedstone extends TileEntity
         this.commandResultStats.func_179668_a(compound);
     }
 
+    @Override
     public Packet getDescriptionPacket()
     {
+        NBTTagCompound syncData = new NBTTagCompound();
+        this.writeToNBT(syncData);
+        return new S35PacketUpdateTileEntity(this.getPos(), this.getBlockMetadata(), syncData);
+    }
 
-        return PacketManager.toMcPacket(new LRPacket(this));
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
+    {
+        readFromNBT(pkt.getNbtCompound());
     }
 
     public boolean getIsEditable()
