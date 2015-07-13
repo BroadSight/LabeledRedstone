@@ -51,7 +51,7 @@ public class ItemLabeledButtonWood extends ItemLR
                 --stack.stackSize;
                 TileEntity tileEntity = worldIn.getTileEntity(pos);
 
-                if (tileEntity instanceof TELabeledRedstone && !ItemBlock.setTileEntityNBT(worldIn, pos, stack))
+                if (tileEntity instanceof TELabeledRedstone && !ItemBlock.setTileEntityNBT(worldIn, pos, stack, playerIn))
                 {
                     playerIn.openGui(LabeledRedstone.instance, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
                 }

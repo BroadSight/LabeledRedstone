@@ -15,6 +15,7 @@
         "facing=east,powered=true": { "model": "labeledredstone:wall_labeled_lever", "x": 90, "y": 90 },
         "facing=west,powered=true": { "model": "labeledredstone:wall_labeled_lever", "x": 90, "y": 270 },
         "facing=south,powered=true": { "model": "labeledredstone:wall_labeled_lever", "x": 90, "y": 180 },
-        "facing=north,powered=true": { "model": "labeledredstone:wall_labeled_lever", "x": 90 }
+        "facing=north,powered=true": { "model": "labeledredstone:wall_labeled_lever", "x": 90 },
+        "inventory": { "model": "labeledredstone:labeled_lever_inventory"}
     }
 }

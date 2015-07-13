@@ -15,6 +15,7 @@ eclipse/
 *.iml
 *.ipr
 *.iws
+.idea/
 
 # server
 config/
@@ -29,3 +30,7 @@ server.properties
 usercache.json
 usernamecache.json
 whitelist.json
+
+saves/
+mods/
+options.txt

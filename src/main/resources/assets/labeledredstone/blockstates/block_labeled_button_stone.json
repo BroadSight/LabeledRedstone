@@ -11,6 +11,7 @@
     "facing=east,powered=true":   { "model": "labeledredstone:stone_button_pressed", "x": 90, "y": 90 },
     "facing=west,powered=true":   { "model": "labeledredstone:stone_button_pressed", "x": 90, "y": 270 },
     "facing=south,powered=true":  { "model": "labeledredstone:stone_button_pressed", "x": 90, "y": 180 },
-    "facing=north,powered=true":  { "model": "labeledredstone:stone_button_pressed", "x": 90 }
+    "facing=north,powered=true":  { "model": "labeledredstone:stone_button_pressed", "x": 90 },
+    "inventory": { "model": "stone_button_inventory" }
   }
 }
