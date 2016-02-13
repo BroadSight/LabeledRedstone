@@ -1,36 +1,25 @@
-# gradle
-.gradle
-build/
-gradle/
-gradlew
-gradlew.bat
-
-# forge gradle
-out/
-
 # eclipse
-eclipse/
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
 
-# intellij
-*.iml
+# idea
+out
 *.ipr
 *.iws
-.idea/
+*.iml
+.idea
 
-# server
-config/
-crash-reports/
-logs/
-world/
-banned-ips.json
-banned-players.json
-eula.txt
-ops.json
-server.properties
-usercache.json
-usernamecache.json
-whitelist.json
+# gradle
+build
+.gradle
+gradle
+gradle.properties
 
-saves/
-mods/
-options.txt
+# other
+eclipse
+run
+java_pid10132.hprof
