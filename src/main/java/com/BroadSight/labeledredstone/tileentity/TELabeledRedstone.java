@@ -1,5 +1,7 @@
 package com.BroadSight.labeledredstone.tileentity;
 
+import com.BroadSight.labeledredstone.LabeledRedstone;
+import com.BroadSight.labeledredstone.network.SPacketUpdateSign;
 import com.BroadSight.labeledredstone.util.LogHelper;
 import com.google.gson.JsonParseException;
 import net.minecraft.command.CommandException;
@@ -11,9 +13,11 @@ import net.minecraft.event.ClickEvent;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S33PacketUpdateSign;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -25,13 +29,13 @@ public class TELabeledRedstone extends TileEntity
 
     public int rotation = 0;
     public int lineBeingEdited = -1;
+    private final CommandResultStats commandResultStats = new CommandResultStats();
     private boolean isEditable = true;
     private EntityPlayer player;
-    private final CommandResultStats commandResultStats = new CommandResultStats();
 
+    @Override
     public void writeToNBT(NBTTagCompound compound)
     {
-        LogHelper.info("TE.writeToNBT");
         super.writeToNBT(compound);
 
         for (int i = 0; i < 4; ++i)
@@ -42,50 +46,85 @@ public class TELabeledRedstone extends TileEntity
 
         compound.setInteger("Rotation", this.rotation);
 
-        this.commandResultStats.func_179670_b(compound);
+        this.commandResultStats.writeStatsToNBT(compound);
     }
 
+    @Override
     public void readFromNBT(NBTTagCompound compound)
     {
-        LogHelper.info("TE.readFromNBT");
-        this.isEditable = false;
+        setIsEditable(false);
         super.readFromNBT(compound);
-        ICommandSender iCommandSender = new ICommandSender()
+
+        ICommandSender icommandsender = new ICommandSender()
         {
-            public String getCommandSenderName()
+            /**
+             * Get the name of this object. For players this returns their username
+             */
+            public String getName()
             {
-                return "LabeledRedstone";
+                return "Sign";
             }
+            /**
+             * Get the formatted ChatComponent that will be used for the sender's username in chat
+             */
             public IChatComponent getDisplayName()
             {
-                return new ChatComponentText(this.getCommandSenderName());
+                return new ChatComponentText(this.getName());
             }
-            public void addChatMessage(IChatComponent message) {}
-            public boolean canCommandSenderUseCommand(int permLevel, String command)
+            /**
+             * Send a chat message to the CommandSender
+             */
+            public void addChatMessage(IChatComponent component)
             {
-                return true;
             }
+            /**
+             * Returns {@code true} if the CommandSender is allowed to execute the command, {@code false} if not
+             */
+            public boolean canCommandSenderUseCommand(int permLevel, String commandName)
+            {
+                return permLevel <= 2; //Forge: Fixes  MC-75630 - Exploit with signs and command blocks
+            }
+            /**
+             * Get the position in the world. <b>{@code null} is not allowed!</b> If you are not an entity in the world,
+             * return the coordinates 0, 0, 0
+             */
             public BlockPos getPosition()
             {
                 return TELabeledRedstone.this.pos;
             }
+            /**
+             * Get the position vector. <b>{@code null} is not allowed!</b> If you are not an entity in the world,
+             * return 0.0D, 0.0D, 0.0D
+             */
             public Vec3 getPositionVector()
             {
                 return new Vec3((double)TELabeledRedstone.this.pos.getX() + 0.5D, (double)TELabeledRedstone.this.pos.getY() + 0.5D, (double)TELabeledRedstone.this.pos.getZ() + 0.5D);
             }
+            /**
+             * Get the world, if available. <b>{@code null} is not allowed!</b> If you are not an entity in the world,
+             * return the overworld
+             */
             public World getEntityWorld()
             {
                 return TELabeledRedstone.this.worldObj;
             }
+            /**
+             * Returns the entity associated with the command sender. MAY BE NULL!
+             */
             public Entity getCommandSenderEntity()
             {
                 return null;
             }
+            /**
+             * Returns true if the command sender should be sent feedback about executed commands
+             */
             public boolean sendCommandFeedback()
             {
                 return false;
             }
-            public void setCommandStat(CommandResultStats.Type type, int amount) {}
+            public void setCommandStat(CommandResultStats.Type type, int amount)
+            {
+            }
         };
 
         for (int i = 0; i < 4; ++i)
@@ -94,18 +133,18 @@ public class TELabeledRedstone extends TileEntity
 
             try
             {
-                IChatComponent iChatComponent = IChatComponent.Serializer.jsonToComponent(s);
+                IChatComponent ichatcomponent = IChatComponent.Serializer.jsonToComponent(s);
 
                 try
                 {
-                    this.signText[i] = ChatComponentProcessor.processComponent(iCommandSender, iChatComponent, (Entity) null);
+                    this.signText[i] = ChatComponentProcessor.processComponent(icommandsender, ichatcomponent, (Entity)null);
                 }
-                catch (CommandException commandException)
+                catch (CommandException var7)
                 {
-                    this.signText[i] = iChatComponent;
+                    this.signText[i] = ichatcomponent;
                 }
             }
-            catch (JsonParseException jsonParseException)
+            catch (JsonParseException var8)
             {
                 this.signText[i] = new ChatComponentText(s);
             }
@@ -113,92 +152,82 @@ public class TELabeledRedstone extends TileEntity
 
         this.rotation = compound.getInteger("Rotation");
 
-        this.commandResultStats.func_179668_a(compound);
+        this.commandResultStats.readStatsFromNBT(compound);
     }
 
     @Override
     public Packet getDescriptionPacket()
     {
-        NBTTagCompound syncData = new NBTTagCompound();
-        this.writeToNBT(syncData);
-        return new S35PacketUpdateTileEntity(this.getPos(), this.getBlockMetadata(), syncData);
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
-    {
-        readFromNBT(pkt.getNbtCompound());
-    }
-
-    public boolean getIsEditable()
-    {
-        return this.isEditable;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void setEditable(boolean editable)
-    {
-        this.isEditable = editable;
-
-        if (!editable)
-        {
-            this.player = null;
-        }
-    }
-
-    public void setPlayer(EntityPlayer player)
-    {
-        this.player = player;
-    }
-
-    public EntityPlayer getPlayer()
-    {
-        return this.player;
-    }
-
-    public int getRotation()
-    {
-        return rotation;
-    }
-
-    public void setRotation(int rotation)
-    {
-        this.rotation = rotation;
+        IChatComponent[] aichatcomponent = new IChatComponent[4];
+        System.arraycopy(this.signText, 0, aichatcomponent, 0, 4);
+        return LabeledRedstone.channel.getPacketFrom(new SPacketUpdateSign(this.worldObj, this.pos, aichatcomponent, this.rotation));
     }
 
     public boolean executeCommand(final EntityPlayer playerIn)
     {
         ICommandSender icommandsender = new ICommandSender()
         {
-            public String getCommandSenderName()
+            /**
+             * Get the name of this object. For players this returns their username
+             */
+            public String getName()
             {
-                return playerIn.getCommandSenderName();
+                return playerIn.getName();
             }
+            /**
+             * Get the formatted ChatComponent that will be used for the sender's username in chat
+             */
             public IChatComponent getDisplayName()
             {
                 return playerIn.getDisplayName();
             }
-            public void addChatMessage(IChatComponent component) {}
+            /**
+             * Send a chat message to the CommandSender
+             */
+            public void addChatMessage(IChatComponent component)
+            {
+            }
+            /**
+             * Returns {@code true} if the CommandSender is allowed to execute the command, {@code false} if not
+             */
             public boolean canCommandSenderUseCommand(int permLevel, String commandName)
             {
-                return true;
+                return permLevel <= 2;
             }
+            /**
+             * Get the position in the world. <b>{@code null} is not allowed!</b> If you are not an entity in the world,
+             * return the coordinates 0, 0, 0
+             */
             public BlockPos getPosition()
             {
                 return TELabeledRedstone.this.pos;
             }
+            /**
+             * Get the position vector. <b>{@code null} is not allowed!</b> If you are not an entity in the world,
+             * return 0.0D, 0.0D, 0.0D
+             */
             public Vec3 getPositionVector()
             {
                 return new Vec3((double)TELabeledRedstone.this.pos.getX() + 0.5D, (double)TELabeledRedstone.this.pos.getY() + 0.5D, (double)TELabeledRedstone.this.pos.getZ() + 0.5D);
             }
+            /**
+             * Get the world, if available. <b>{@code null} is not allowed!</b> If you are not an entity in the world,
+             * return the overworld
+             */
             public World getEntityWorld()
             {
                 return playerIn.getEntityWorld();
             }
+            /**
+             * Returns the entity associated with the command sender. MAY BE NULL!
+             */
             public Entity getCommandSenderEntity()
             {
                 return playerIn;
             }
+            /**
+             * Returns true if the command sender should be sent feedback about executed commands
+             */
             public boolean sendCommandFeedback()
             {
                 return false;
@@ -227,7 +256,43 @@ public class TELabeledRedstone extends TileEntity
         return true;
     }
 
-    public CommandResultStats getCommandResultStats()
+    public int getRotation()
+    {
+        return rotation;
+    }
+
+    public void setRotation(int rotation)
+    {
+        this.rotation = rotation;
+    }
+
+    public boolean getIsEditable()
+    {
+        return this.isEditable;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void setIsEditable(boolean isEditableIn)
+    {
+        this.isEditable = isEditableIn;
+
+        if (!isEditableIn)
+        {
+            this.player = null;
+        }
+    }
+
+    public void setPlayer(EntityPlayer playerIn)
+    {
+        this.player = playerIn;
+    }
+
+    public EntityPlayer getPlayer()
+    {
+        return this.player;
+    }
+
+    public CommandResultStats getStats()
     {
         return this.commandResultStats;
     }

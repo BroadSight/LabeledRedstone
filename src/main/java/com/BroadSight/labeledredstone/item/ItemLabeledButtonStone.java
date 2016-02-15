@@ -49,12 +49,7 @@ public class ItemLabeledButtonStone extends ItemLR
                 worldIn.setBlockState(pos, ModBlocks.block_labeled_button_stone.getDefaultState().withProperty(BlockLabeledButton.FACING, side), 3);
 
                 --stack.stackSize;
-                TileEntity tileEntity = worldIn.getTileEntity(pos);
-
-                if (tileEntity instanceof TELabeledRedstone && !ItemBlock.setTileEntityNBT(worldIn, pos, stack, playerIn))
-                {
-                    playerIn.openGui(LabeledRedstone.instance, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
-                }
+                createTileEntity(worldIn, pos, playerIn, stack);
 
                 return true;
             }

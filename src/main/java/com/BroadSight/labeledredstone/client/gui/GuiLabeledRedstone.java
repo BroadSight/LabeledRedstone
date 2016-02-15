@@ -1,14 +1,18 @@
 package com.BroadSight.labeledredstone.client.gui;
 
+import com.BroadSight.labeledredstone.LabeledRedstone;
+import com.BroadSight.labeledredstone.network.CPacketUpdateSign;
 import com.BroadSight.labeledredstone.tileentity.TELabeledRedstone;
 import com.BroadSight.labeledredstone.util.LogHelper;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Blocks;
 import net.minecraft.network.Packet;
 import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.util.ChatComponentText;
@@ -29,20 +33,14 @@ public class GuiLabeledRedstone extends GuiScreen
     public GuiLabeledRedstone(TELabeledRedstone te)
     {
         teLabeledRedstone = te;
-
-        LogHelper.info("Gui constructor");
     }
 
     public void initGui()
     {
-        LogHelper.info("Gui init start");
-
         this.buttonList.clear();
         Keyboard.enableRepeatEvents(true);
         this.buttonList.add(this.doneBtn = new GuiButton(0, this.width / 2 - 100, this.height / 4 + 120, I18n.format("gui.done", new Object[0])));
-        this.teLabeledRedstone.setEditable(false);
-
-        LogHelper.info("   end");
+        this.teLabeledRedstone.setIsEditable(false);
     }
 
     public void onGuiClosed()
@@ -55,10 +53,10 @@ public class GuiLabeledRedstone extends GuiScreen
 
         if (nethandlerplayclient != null)
         {
-            nethandlerplayclient.addToSendQueue(packet);
+            nethandlerplayclient.addToSendQueue(LabeledRedstone.channel.getPacketFrom(new CPacketUpdateSign(teLabeledRedstone.getPlayer(), teLabeledRedstone.getPos(), teLabeledRedstone.signText, teLabeledRedstone.rotation)));
         }
 
-        this.teLabeledRedstone.setEditable(true);
+        this.teLabeledRedstone.setIsEditable(true);
     }
 
     public void updateScreen()
@@ -90,7 +88,7 @@ public class GuiLabeledRedstone extends GuiScreen
             this.editLine = this.editLine + 1 & 3;
         }
 
-        String s = this.teLabeledRedstone.signText[this.editLine].getFormattedText();
+        String s = this.teLabeledRedstone.signText[this.editLine].getUnformattedText();
 
         if (keyCode == 14 && s.length() > 0)
         {
@@ -112,22 +110,45 @@ public class GuiLabeledRedstone extends GuiScreen
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
-        LogHelper.info("Gui draw screen start");
-
         this.drawDefaultBackground();
         this.drawCenteredString(this.fontRendererObj, I18n.format("sign.edit", new Object[0]), this.width / 2, 40, 16777215);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.pushMatrix();
         GlStateManager.translate((float)(this.width / 2), 0.0F, 50.0F);
-        float f1 = 93.75F;
-        GlStateManager.scale(-f1, -f1, -f1);
+        float f = 93.75F;
+        GlStateManager.scale(-f, -f, -f);
         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
         Block block = this.teLabeledRedstone.getBlockType();
 
-        float f = (float)(this.teLabeledRedstone.rotation * 360) / 16.0F;
+        if (block == Blocks.standing_sign)
+        {
+            float f1 = (float)(this.teLabeledRedstone.getRotation() * 360) / 16.0F;
+            GlStateManager.rotate(f1, 0.0F, 1.0F, 0.0F);
+            GlStateManager.translate(0.0F, -1.0625F, 0.0F);
+        }
+        else
+        {
+            int i = this.teLabeledRedstone.getBlockMetadata();
+            float f2 = 0.0F;
 
-        GlStateManager.rotate(f, 0.0F, 1.0F, 0.0F);
-        GlStateManager.translate(0.0F, -1.0625F, 0.0F);
+            if (i == 2)
+            {
+                f2 = 180.0F;
+            }
+
+            if (i == 4)
+            {
+                f2 = 90.0F;
+            }
+
+            if (i == 5)
+            {
+                f2 = -90.0F;
+            }
+
+            GlStateManager.rotate(f2, 0.0F, 1.0F, 0.0F);
+            GlStateManager.translate(0.0F, -1.0625F, 0.0F);
+        }
 
         if (this.updateCounter / 6 % 2 == 0)
         {
@@ -138,7 +159,5 @@ public class GuiLabeledRedstone extends GuiScreen
         this.teLabeledRedstone.lineBeingEdited = -1;
         GlStateManager.popMatrix();
         super.drawScreen(mouseX, mouseY, partialTicks);
-
-        LogHelper.info("   end");
     }
 }
